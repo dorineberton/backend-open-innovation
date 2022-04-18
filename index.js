@@ -9,6 +9,7 @@ const database = knex(config.development)
 
 const login = require('./routes/login')
 const user = require('./routes/users')
+
 const cors = require("cors");
 // Create an app that is a Feathers AND Express application
 app = express(feathers());
@@ -39,11 +40,12 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 app.get('/', (req,res) => {
-    res.send("ok")
+  res.send("ok")
 })
 
 /* Routes */
 app.use('/login', login);
+// app.use('/users', user);
 app.use('/users', user);
 
 /* Port */
