@@ -19,6 +19,6 @@ router.get('/:id', function(req, res) {
   /*const user = users.find(user => user.id === id)
   res.status(200).json(user)*/
 });
-
+// router.use('/create', createUser)
 router.use('/create', auth, createUser)
 module.exports = router;

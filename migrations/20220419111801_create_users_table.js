@@ -1,4 +1,3 @@
-
 exports.up = function(knex, Promise) {
     return knex.schema.createTable('user', function(table) {
       table.increments();
@@ -6,7 +5,8 @@ exports.up = function(knex, Promise) {
       table.string('lastname').notNullable();
       table.string('email').notNullable();
       table.string('password').notNullable();
-      table.boolean('has_access').defaultTo(false);
+      table.boolean('has_access').defaultTo(1);
+      table.string('role').defaultTo('user');
     })
 };
 
