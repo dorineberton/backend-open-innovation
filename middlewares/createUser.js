@@ -14,18 +14,15 @@ module.exports = async (request, response, next) => {
         //use feathers-knex
         let userService = service({Model: database, name: 'user'})
         let selectUser = await userService.find({ query: {email} })
-        if(selectUser[0] === undefined || selectUser[0] === '') {
-          let insertUser = async () => {
-            await userService.create({firstname: firstname, lastname: lastname, email: email, password: hash, has_access: 1, role: 'user'})
-          }
-          try{
-              insertUser()
-              response.send({message: 'enregistrement ok'})
-          } 
-          catch {
-            response.send({message: 'erreur enregistrement'})
-          }
-          next()
-        } else response.send({message: 'le compte existe déjà'})
-
+        let insertUser = async () => {
+          await userService.create({firstname: firstname, lastname: lastname, email: email, password: hash, has_access: 1, role: 'user'})
+        }
+        try{
+            insertUser()
+            response.send({message: 'enregistrement ok'})
+        } 
+        catch {
+          response.send({message: 'erreur enregistrement'})
+        }
+        next()
       }

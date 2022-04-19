@@ -16,8 +16,7 @@ router.get('/', readUsers)
 
 router.get('/:id', function(req, res) {
   const id = parseInt(req.params.id)
-  /*const user = users.find(user => user.id === id)
-  res.status(200).json(user)*/
+  // TODO
 });
 // router.use('/create', createUser)
 router.use('/create', auth, createUser)
