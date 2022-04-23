@@ -4,10 +4,10 @@ exports.up = function(knex, Promise) {
     table.increments();
     table.string('firstname').notNullable();
     table.string('lastname').notNullable();
-    table.string('email').unique().notNullable();
+    table.string('email').notNullable();
     table.string('password').notNullable();
     table.boolean('has_access').defaultTo(1);
-    table.string('role').defaultTo('user');
+    table.string('role').notNullable();
     })
     } catch (err) {
     console.error('impossible de créer l\'utilisateur:', err);

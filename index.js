@@ -10,9 +10,13 @@ const database = knex(config.development)
 const login = require('./routes/login')
 const user = require('./routes/users')
 
+const bodyParser=require('body-parser');
+
 const cors = require("cors");
+
 // Create an app that is a Feathers AND Express application
 app = express(feathers());
+app.configure(express.rest());
 
 // gestion des cors
 app.use(cors());
@@ -23,7 +27,7 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
-/*
+
 var allowlist = ['http://localhost:8080', 'http://127.0.0.1:8080/']
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
@@ -34,22 +38,23 @@ var corsOptionsDelegate = function (req, callback) {
   }
   callback(null, corsOptions) // callback expects two parameters: error and options
 }
-*/
-// replace body-parser
-app.use(express.urlencoded({extended: true})); 
-app.use(express.json());
 
-app.get('/', (req,res) => {
-  res.send("ok")
-})
+// parse data
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.json())
 
 /* Routes */
-app.use('/login', login);
-// app.use('/users', user);
-app.use('/users', user);
+
+app.get('/', (req,res) => {
+  res.send('ok')
+})
+
+app.use('/login', cors(corsOptionsDelegate), login);
+app.use('/users', cors(corsOptionsDelegate), user);
 
 /* Port */
 
 var server = app.listen(process.env.PORT || 5000, () => {
-	console.log("App listening at http://localhost:",  server.address().port);
+	console.log('App listening at http://localhost:',  server.address().port);
 })
