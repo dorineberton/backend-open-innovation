@@ -1,6 +1,6 @@
 # backend-open-innovation
 
-# run app
+# run appno
 npx nodemon index.js
 
 # create knex file if doesn't exists
