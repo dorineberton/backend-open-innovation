@@ -56,5 +56,5 @@ app.use('/users', cors(corsOptionsDelegate), user);
 /* Port */
 
 var server = app.listen(process.env.PORT || 5000, () => {
-	console.log('App listening at http://localhost:',  server.address().port);
+	console.log('App listening at https://back-securiface.herokuapp.com',  server.address().port);
 })
