@@ -1,8 +1,4 @@
-const knex = require('knex')
-const service = require('feathers-knex')
-let config = require('../knexfile.js')
-let database = knex(config.development)
-const jwt = require('jsonwebtoken');
+
 
 module.exports = async (req, res, next) => {
   try {

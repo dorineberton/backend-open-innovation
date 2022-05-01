@@ -4,6 +4,7 @@ const express = require('@feathersjs/express');
 
 /* Database */
 const knex = require('knex')
+const service = require('feathers-knex')
 const config = require('./knexfile.js')
 const database = knex(config.development)
 
@@ -11,6 +12,7 @@ const login = require('./routes/login')
 const user = require('./routes/users')
 
 const bodyParser=require('body-parser');
+const jwt = require('jsonwebtoken');
 
 const cors = require("cors");
 
@@ -52,6 +54,43 @@ app.get('/', (req,res) => {
 
 app.use('/login', cors(corsOptionsDelegate), login);
 app.use('/users', cors(corsOptionsDelegate), user);
+
+/* websockets */
+const WebSocket = require('ws')
+
+const wss = new WebSocket.Server({ port: 5001 })
+
+wss.on('connection', ws => {
+  console.log('connexion ok')
+  let users = []
+  ws.on('message', async(message) => {
+    if(message !== '' && message !== undefined){
+      // message.toString();
+      // console.log('je suis ici', message.toString())
+      const decodedToken = jwt.verify(message.toString(), 'secret2');
+      console.log('decoded', decodedToken)
+      const userId = decodedToken.id;
+      console.log('userid', userId)
+      try {
+      let userService = service({Model: database, name: 'user'})
+      let selectUser = await userService.find({ query: {id: userId} })
+      // const id_user = selectUser[0].id
+      const id = selectUser[0].id
+      console.log('user', selectUser[0].id)
+      if(!id in users) {
+          users.push(id)
+          console.log('users', users)
+      }
+      } catch (e) {
+      console.log('erreur recuperation utilisateur', e)
+      }
+    }
+  })
+ws.on('close', function () {
+    //...
+})
+  ws.send('web-socket ok !')
+})
 
 /* Port */
 
