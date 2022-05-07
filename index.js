@@ -30,7 +30,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-var allowlist = ['http://localhost:8080', 'http://127.0.0.1:8080/', 'https://front-securiface.herokuapp.com/']
+var allowlist = ['http://localhost:8080/', 'http://127.0.0.1:8080/', 'https://front-securiface.herokuapp.com/']
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
   if (allowlist.indexOf(req.header('Origin')) !== -1) {
@@ -59,9 +59,8 @@ app.use('/users', cors(corsOptionsDelegate), user);
 const WebSocket = require('ws')
 
 const wss = new WebSocket.Server({ port: 5001 })
-
 wss.on('connection', ws => {
-  console.log('connexion ok')
+  console.log('connexion ok', wss.url)
   let users = []
   ws.on('message', async(message) => {
     if(message !== '' && message !== undefined){
