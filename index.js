@@ -30,7 +30,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-var allowlist = ['http://localhost:8080', 'http://127.0.0.1:8080/']
+var allowlist = ['http://localhost:8080', 'http://127.0.0.1:8080/', 'https://front-securiface.herokuapp.com/']
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
   if (allowlist.indexOf(req.header('Origin')) !== -1) {
@@ -95,5 +95,5 @@ ws.on('close', function () {
 /* Port */
 
 var server = app.listen(process.env.PORT || 5000, () => {
-	console.log('App listening at http://localhost:',  server.address().port);
+	console.log('App listening at https://back-securiface.herokuapp.com',  server.address().port);
 })
