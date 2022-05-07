@@ -59,13 +59,20 @@ app.use('/users', cors(corsOptionsDelegate), user);
 const WebSocket = require('ws')
 
 const wss = new WebSocket.Server({ port: 5001 })
+let webSockets = {} // userID: webSocket
+
 wss.on('connection', ws => {
-  console.log('connexion ok', wss.url)
+  console.log('connexion ok')
   let users = []
+  var userID = parseInt(ws.upgradeReq.url.substr(1), 10)
+  webSockets[userID] = ws
+  console.log('connected: ' + userID + ' in ' + Object.getOwnPropertyNames(webSockets))
+
   ws.on('message', async(message) => {
     if(message !== '' && message !== undefined){
       // message.toString();
-      // console.log('je suis ici', message.toString())
+      // console.log('je suis ici', message.toString())var userID = parseInt(webSocket.upgradeReq.url.substr(1), 10)
+      
       const decodedToken = jwt.verify(message.toString(), 'secret2');
       console.log('decoded', decodedToken)
       const userId = decodedToken.id;
@@ -79,9 +86,14 @@ wss.on('connection', ws => {
       if(!id in users) {
           users.push(id)
           console.log('users', users)
+          const newMessage = {
+            user: selectUser[0],
+            token: message
+          }
+          // ws.send(newMessage)
       }
       } catch (e) {
-      console.log('erreur recuperation utilisateur', e)
+      console.log('erreur connexion', e)
       }
     }
   })
