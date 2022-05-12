@@ -9,7 +9,7 @@ let jwt = require('jsonwebtoken')
 
 router.post('/', async function (req, res) {
     const email = req.body.email
-    console.log('je suis dans login')
+    console.log('je suis dans login', email)
     //use feathers-knex
     let userService = service({Model: database, name: 'user'})
     let selectUser = await userService.find({ query: {email} })
@@ -20,7 +20,7 @@ router.post('/', async function (req, res) {
       let password = selectUser[0].password
       bcrypt.compare(req.body.password, password, function(error, response) {
         if(response){
-          console.log('response', response)
+          console.log('response', response, 'id_user', id_user)
           let token = jwt.sign({id:id_user}, 'secret2')
           res.cookie("cookie", token, {maxAge: 10*60*1000})
           res.status(200).json({message: "connecté", user: selectUser[0], token: token})  

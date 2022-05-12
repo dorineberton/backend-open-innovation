@@ -9,7 +9,7 @@ const auth = require('../middlewares/authenticate')
 // middleware that is specific to this router
 router.get('/', readUsers)
 
-router.get('/:id', readUser);
+router.get('/:id', auth, readUser);
 router.post('/create', auth, createUser)
 // router.use('/create', auth, createUser)
 
