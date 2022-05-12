@@ -8,6 +8,7 @@ let database = knex(config.development)
 let jwt = require('jsonwebtoken')
 
 router.post('/', async function (req, res, next) {
+    const reqPath = req.originalUrl
     if (reqPath == '/login'){
       const email = req.body.email
       console.log('je suis dans login', email)
