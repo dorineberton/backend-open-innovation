@@ -28,7 +28,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-var allowlist = ['http://localhost:8080', 'http://127.0.0.1:8080/', 'https://front-securiface.herokuapp.com/']
+var allowlist = ['http://localhost:8080', 'http://127.0.0.1:8080/', 'https://front-securiface.herokuapp.com/', 'http://socket-securiface.herokuapp.com/']
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
   if (allowlist.indexOf(req.header('Origin')) !== -1) {
