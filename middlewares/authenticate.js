@@ -28,7 +28,7 @@ module.exports = async (req, res, next) => {
           console.log('userId', userId, 'id', id_user)
           res.status(401).send({error: 'non autorisé'})
         }
-      } else if (reqPath === '/users' || reqPath === '/users/:id') {
+      } else if (reqPath.startsWith('/users')) {
         console.log('je suis un user')
         console.log('role', role_user, userId, id_user)
         if(role_user !== undefined && userId == id_user) {

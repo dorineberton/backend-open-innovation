@@ -4,6 +4,7 @@ const express = require('@feathersjs/express');
 
 /* Database */
 const knex = require('knex')
+const service = require('feathers-knex')
 const config = require('./knexfile.js')
 const database = knex(config.development)
 
@@ -11,6 +12,7 @@ const login = require('./routes/login')
 const user = require('./routes/users')
 
 const bodyParser=require('body-parser');
+const jwt = require('jsonwebtoken');
 
 const cors = require("cors");
 
@@ -28,7 +30,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-var allowlist = ['http://localhost:8080', 'http://127.0.0.1:8080/', 'https://frontend-securiface.herokuapp.com/', 'http://socket-securiface.herokuapp.com/']
+var allowlist = ['http://localhost:8080/', 'http://127.0.0.1:8080/', 'https://front-securiface.herokuapp.com/']
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
   if (allowlist.indexOf(req.header('Origin')) !== -1) {
@@ -53,8 +55,41 @@ app.get('/', (req,res) => {
 app.use('/login', cors(corsOptionsDelegate), login);
 app.use('/users', cors(corsOptionsDelegate), user);
 
+/* sockets */
+let httpServer = require("http").createServer();
+const io = require("socket.io")(httpServer, {
+  cors: {
+    origin: "https://front-securiface.herokuapp.com/",
+    credentials: true,
+    methods: ["GET", "POST"],
+  }
+});
+io.on("connection", (socket) => {
+  // send a message to the client
+  socket.emit("hello from server", 1, "2", { 3: Buffer.from([4]) });
+
+  // receive a message from the client
+  socket.on("hello from client", (...args) => {
+    // ...
+  });
+});
+/*
+io.on("connection", (socket) => {
+  // send a message to the client
+  socket.emit("hello from server", 1, "2", { 3: Buffer.from([4]) });
+
+  // receive a message from the client
+  socket.on("hello from client", (...args) => {
+    // ...
+  });
+});*/
+httpServer = app.listen(5500, () => {
+  console.log('ws listen on localhost', httpServer.address().port)
+});
 /* Port */
 
-var server = app.listen(process.env.PORT || 5000, () => {
+const HTTP_PORT = 5000
+
+server = app.listen(process.env.PORT || 5000, () => {
 	console.log('App listening at https://back-securiface.herokuapp.com',  server.address().port);
 })
