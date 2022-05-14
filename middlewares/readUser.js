@@ -10,8 +10,10 @@ module.exports = async (request, response, next) => {
             let userService = service({Model: database, name: 'user'})
             let usersRetrieved = []
             let message = ''
+            console.log('je suis dans readuser')
             try{
             const user = await userService.find({ query: {id: userId} })
+            console.log('j ai recup user dans readuser', user)
             if(user) response.send({user: user})
             else response.send({message: 'Aucun utilisateur enregistré'})
             } 
